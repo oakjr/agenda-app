@@ -1,31 +1,60 @@
-Sistema de Gerenciamento de Agenda
+# Sistema de Gerenciamento de Agenda
 
 Este projeto é uma aplicação completa para o gerenciamento de agendas pessoais e compartilhadas. Os usuários podem criar eventos, compartilhá-los com outros usuários, editar, excluir e filtrar eventos por data ou texto. O sistema é dividido em back-end (ASP.NET Core) e front-end (Angular).
 
-🧩 Tecnologias Utilizadas
+---
 
-Back-end
+## 🧰 Pré-requisitos
 
-ASP.NET Core
+### Backend (.NET)
 
-Entity Framework Core
+* .NET 6 SDK ou superior
+* SQL Server instalado localmente ou via Docker
+* Projeto Web API criado com:
 
-JWT Authentication
+```bash
+ dotnet new webapi -n AgendaAppBackend
+ cd AgendaAppBackend
+```
 
-SQL Server
+* Pacotes NuGet obrigatórios:
 
-Front-end
+```bash
+ dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+ dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+ dotnet add package Microsoft.IdentityModel.Tokens
+ dotnet add package System.IdentityModel.Tokens.Jwt
+```
 
-Angular
+### Frontend (Angular)
 
-Tailwind CSS (para estilo)
+* Node.js 18+
+* Angular CLI 15+ (instale com `npm install -g @angular/cli`)
 
-RxJS / HttpClient
+---
 
-📦 Instalação
+## 🧩 Tecnologias Utilizadas
 
-Backend (ASP.NET Core)
+### Back-end
 
+* ASP.NET Core
+* Entity Framework Core
+* JWT Authentication
+* SQL Server
+
+### Front-end
+
+* Angular
+* Tailwind CSS (para estilo)
+* RxJS / HttpClient
+
+---
+
+## 📦 Instalação
+
+### Backend (ASP.NET Core)
+
+```bash
 cd backend
 
 # Restaurar pacotes e compilar
@@ -35,11 +64,13 @@ dotnet build
 
 # Rodar aplicação
 dotnet run
+```
 
-A API estará disponível por padrão em: http://localhost:5000
+> A API estará disponível por padrão em: `http://localhost:5000`
 
-Frontend (Angular)
+### Frontend (Angular)
 
+```bash
 cd frontend
 
 # Instalar dependências
@@ -47,69 +78,82 @@ npm install
 
 # Rodar aplicação Angular
 ng serve --open
+```
 
-A aplicação será aberta em: http://localhost:4200
+> A aplicação será aberta em: `http://localhost:4200`
 
-🔐 Configurações de Ambiente
+---
 
-No arquivo appsettings.json:
+## 🔐 Configurações de Ambiente
 
+No arquivo `appsettings.json`:
+
+```json
 "Jwt": {
   "Key": "sua_chave_super_secreta"
+},
+"ConnectionStrings": {
+  "DefaultConnection": "Server=localhost;Database=AgendaDb;Trusted_Connection=True;"
 }
+```
 
-📋 Funcionalidades
+---
 
-Autenticação JWT com login
+## 📋 Funcionalidades
 
-Cada usuário tem sua própria agenda
+* Autenticação JWT com login
+* Cada usuário tem sua própria agenda
+* Criação de eventos com:
 
-Criação de eventos com:
+  * Nome, descrição, data, local, tipo (exclusivo/compartilhado), participantes
+* Edição e exclusão de eventos
+* Filtros na dashboard:
 
-Nome, descrição, data, local, tipo (exclusivo/compartilhado), participantes
+  * Por texto
+  * Por data
+  * Botões de acesso rápido: eventos do dia, semana, mês
 
-Edição e exclusão de eventos
+---
 
-Filtros na dashboard:
+## 🧪 Instruções de Teste Manual
 
-Por texto
+### 1. Criar Usuário (registro)
 
-Por data
+Endpoint: `POST /api/usuario/registrar`
 
-Botões de acesso rápido: eventos do dia, semana, mês
-
-🧪 Instruções de Teste Manual
-
-1. Criar Usuário (registro)
-
-Endpoint: POST /api/usuario/registrar
-
+```json
 {
   "nome": "João da Silva",
   "email": "joao@example.com",
   "senha": "123456"
 }
+```
 
-2. Login
+### 2. Login
 
-Endpoint: POST /api/usuario/login
+Endpoint: `POST /api/usuario/login`
 
+```json
 {
   "email": "joao@example.com",
   "senha": "123456"
 }
+```
 
 Resposta:
 
+```json
 {
   "token": "<JWT>"
 }
+```
 
-3. Criar Evento
+### 3. Criar Evento
 
-Endpoint: POST /api/eventos
-Header: Authorization: Bearer <JWT>
+Endpoint: `POST /api/eventos`
+Header: `Authorization: Bearer <JWT>`
 
+```json
 {
   "nome": "Reunião de Projeto",
   "descricao": "Alinhamento de tarefas",
@@ -118,27 +162,32 @@ Header: Authorization: Bearer <JWT>
   "tipo": "Compartilhado",
   "participantesIds": [2, 3]
 }
+```
 
-4. Filtrar Eventos
+### 4. Filtrar Eventos
 
-GET /api/eventos?search=projeto
+* `GET /api/eventos?search=projeto`
+* `GET /api/eventos?data=2025-06-01`
+* `GET /api/eventos/hoje`
+* `GET /api/eventos/semana`
+* `GET /api/eventos/mes`
 
-GET /api/eventos?data=2025-06-01
+### 5. Editar Evento
 
-GET /api/eventos/hoje
+Endpoint: `PUT /api/eventos/{id}`
 
-GET /api/eventos/semana
+### 6. Deletar Evento
 
-GET /api/eventos/mes
+Endpoint: `DELETE /api/eventos/{id}`
 
-5. Editar Evento
+---
 
-Endpoint: PUT /api/eventos/{id}
+## 🖼️ Diagrama UML
 
-6. Deletar Evento
+O diagrama de classes UML representa os principais relacionamentos entre as entidades `Usuario`, `Evento`, `EventoDTO`, `LoginRequest`, e `TipoEvento`. Consulte a imagem incluída no projeto para detalhes.
 
-Endpoint: DELETE /api/eventos/{id}
+---
 
-🖼️ Diagrama UML
+## 📜 Licença
 
-O diagrama de classes UML representa os principais relacionamentos entre as entidades Usuario, Evento, EventoDTO, LoginRequest, e TipoEvento. Consulte a imagem incluída no projeto para detalhes.
+Este projeto é de uso acadêmico e educativo. Direitos reservados à equipe do curso CCO002 - Engenharia de Software II - UNIFEI.

@@ -1,0 +1,8 @@
+C:\dev\agenda-app\backend\obj\Debug\net9.0\backend.csproj.AssemblyReference.cache
+C:\dev\agenda-app\backend\obj\Debug\net9.0\backend.GeneratedMSBuildEditorConfig.editorconfig
+C:\dev\agenda-app\backend\obj\Debug\net9.0\backend.AssemblyInfoInputs.cache
+C:\dev\agenda-app\backend\obj\Debug\net9.0\backend.AssemblyInfo.cs
+C:\dev\agenda-app\backend\obj\Debug\net9.0\backend.csproj.CoreCompileInputs.cache
+C:\dev\agenda-app\backend\obj\Debug\net9.0\backend.MvcApplicationPartsAssemblyInfo.cs
+C:\dev\agenda-app\backend\obj\Debug\net9.0\backend.MvcApplicationPartsAssemblyInfo.cache
+C:\dev\agenda-app\backend\obj\Debug\net9.0\backend.sourcelink.json
