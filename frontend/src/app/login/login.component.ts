@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService, LoginRequest } from '../services/auth.service';
+import { AuthService } from '../services/auth.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-login',
@@ -8,15 +9,26 @@ import { AuthService, LoginRequest } from '../services/auth.service';
     styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-    loginRequest: LoginRequest = { email: '', senha: '' };
+    loginForm: FormGroup;
     erroLogin: string = '';
 
-    constructor(private authService: AuthService, private router: Router) { }
+    constructor(
+        private fb: FormBuilder,
+        private authService: AuthService,
+        private router: Router
+    ) {
+        this.loginForm = this.fb.group({
+            email: ['', [Validators.required, Validators.email]],
+            senha: ['', Validators.required]
+        });
+    }
 
     realizarLogin(): void {
-        this.authService.login(this.loginRequest).subscribe({
-            next: () => this.router.navigate(['/dashboard']),
-            error: () => this.erroLogin = 'Email ou senha inválidos.'
-        });
+        if (this.loginForm.valid) {
+            this.authService.login(this.loginForm.value).subscribe({
+                next: () => this.router.navigate(['/dashboard']),
+                error: () => this.erroLogin = 'Email ou senha inválidos.'
+            });
+        }
     }
 }

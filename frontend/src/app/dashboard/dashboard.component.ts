@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EventoService, Evento } from '../services/evento.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-dashboard',
@@ -8,10 +9,14 @@ import { EventoService, Evento } from '../services/evento.service';
 })
 export class DashboardComponent implements OnInit {
     eventos: Evento[] = [];
-    filtroTexto = '';
-    dataSelecionada: string = '';
+    filtroForm: FormGroup;
 
-    constructor(private eventoService: EventoService) { }
+    constructor(private eventoService: EventoService, private fb: FormBuilder) {
+        this.filtroForm = this.fb.group({
+            texto: [''],
+            data: ['']
+        });
+    }
 
     ngOnInit(): void {
         this.carregarEventos();
@@ -22,16 +27,18 @@ export class DashboardComponent implements OnInit {
     }
 
     aplicarFiltroTexto(): void {
-        if (this.filtroTexto.trim()) {
-            this.eventoService.filtrarEventosPorTexto(this.filtroTexto).subscribe(res => this.eventos = res);
+        const texto = this.filtroForm.get('texto')?.value;
+        if (texto?.trim()) {
+            this.eventoService.filtrarEventosPorTexto(texto).subscribe(res => this.eventos = res);
         } else {
             this.carregarEventos();
         }
     }
 
     aplicarFiltroData(): void {
-        if (this.dataSelecionada) {
-            this.eventoService.filtrarEventosPorData(this.dataSelecionada).subscribe(res => this.eventos = res);
+        const data = this.filtroForm.get('data')?.value;
+        if (data) {
+            this.eventoService.filtrarEventosPorData(data).subscribe(res => this.eventos = res);
         }
     }
 
