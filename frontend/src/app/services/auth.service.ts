@@ -12,7 +12,7 @@ export interface LoginRequest {
     providedIn: 'root'
 })
 export class AuthService {
-    private readonly API = 'http://localhost:5000/api/usuario';
+    private readonly API = 'http://localhost:5232/api/usuario';
     private readonly TOKEN_KEY = 'agenda_token';
 
     constructor(private http: HttpClient, private router: Router) { }
