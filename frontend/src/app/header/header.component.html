@@ -1,0 +1,12 @@
+<header class="bg-blue-600 text-white px-4 py-3 flex items-center justify-between">
+    <div class="text-xl font-bold">Agenda App</div>
+
+    <div *ngIf="usuarioLogado; else boasVindas" class="flex items-center gap-4">
+        <span class="text-sm">Olá, {{ usuarioLogado }}</span>
+        <button (click)="logout()" class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded">Logout</button>
+    </div>
+
+    <ng-template #boasVindas>
+        <span class="text-sm">Bem-vindo à Agenda App</span>
+    </ng-template>
+</header>
