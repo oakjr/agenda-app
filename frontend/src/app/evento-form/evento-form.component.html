@@ -36,7 +36,7 @@
             <div>
                 <label class="block mb-1">Participantes (IDs separados por vírgula)</label>
                 <input type="text"
-                    change="form.controls['participantesIds'].setValue((<HTMLInputElement>$event.target).value.split(',').map(x => +x.trim()))"
+                    change="form.controls['participantesIds'].setValue(($any($event.target).value.split(',').map(x => +x.trim())))"
                     class="w-full p-2" />
             </div>
 

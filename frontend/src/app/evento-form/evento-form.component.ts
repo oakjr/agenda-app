@@ -5,8 +5,7 @@ import { EventoService, Evento } from '../services/evento.service';
 
 @Component({
   selector: 'app-evento-form',
-  templateUrl: './evento-form.component.html',
-  styleUrls: ['./evento-form.component.css']
+  templateUrl: './evento-form.component.html'
 })
 export class EventoFormComponent implements OnInit {
   form: FormGroup;
@@ -37,7 +36,13 @@ export class EventoFormComponent implements OnInit {
       this.eventoService.listarEventos().subscribe(eventos => {
         const evento = eventos.find(e => e.id === this.eventoId);
         if (evento) {
-          this.form.patchValue(evento);
+          const dataFormatada = evento.data?.substring(0, 16); // yyyy-MM-ddTHH:mm
+          this.form.patchValue({
+            ...evento,
+            data: dataFormatada,
+            tipo: evento.tipo || 'Exclusivo',
+            participantesIds: evento.participantesIds || []
+          });
         }
       });
     }

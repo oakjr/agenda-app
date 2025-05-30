@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EventoService, Evento } from '../services/evento.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-dashboard',
@@ -10,9 +11,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class DashboardComponent implements OnInit {
     eventos: Evento[] = [];
     filtroForm: FormGroup;
-    router: any;
 
-    constructor(private eventoService: EventoService, private fb: FormBuilder) {
+    constructor(private eventoService: EventoService, private fb: FormBuilder, private router: Router) {
         this.filtroForm = this.fb.group({
             texto: [''],
             data: ['']
@@ -43,9 +43,6 @@ export class DashboardComponent implements OnInit {
         }
     }
 
-    editarEvento(id: number): void {
-        this.router.navigate([`/evento/${id}/editar`]);
-    }
     filtrarHoje(): void {
         this.eventoService.eventosDoDia().subscribe(res => this.eventos = res);
     }
@@ -63,5 +60,17 @@ export class DashboardComponent implements OnInit {
         this.eventoService.alterarStatus(evento.id, novoStatus).subscribe(res => {
             evento.ativo = res.ativo;
         });
+    }
+
+    editarEvento(id: number): void {
+        this.router.navigate([`/evento/${id}/editar`]);
+    }
+
+    removerEvento(id: number): void {
+        this.eventoService.removerEvento(id).subscribe(() => this.carregarEventos());
+    }
+
+    criarNovoEvento(): void {
+        this.router.navigate(['/evento/novo']);
     }
 }
