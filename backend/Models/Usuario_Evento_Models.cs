@@ -29,6 +29,7 @@ public class Evento
     public int CriadorId { get; set; }
     public Usuario Criador { get; set; }
     public List<Usuario> Participantes { get; set; } = new();
+
 }
 
 // DTOs

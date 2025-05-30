@@ -4,18 +4,12 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TestComponent } from './test/test.component';
 
-const routes: Routes = [{
-  path: "login",
-  component: LoginComponent
-},
-{
-  path: "dashboard",
-  component: DashboardComponent
-},
-{
-  path: "test",
-  component: TestComponent
-}];
+const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: '**', redirectTo: 'login' }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

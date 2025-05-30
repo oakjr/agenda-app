@@ -1,13 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.InMemory;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-// JWT Config
+// JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -21,57 +20,69 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// DbContext
 builder.Services.AddAuthorization();
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseInMemoryDatabase("MockDb"));
 
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddAuthorization();
-
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// ✅ Mock de usuários no banco em memória
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    if (!context.Usuarios.Any())
+    {
+        var usuario1 = new Usuario { Id = 1, Nome = "Alice", Email = "alice@test.com", Senha = "123" };
+        var usuario2 = new Usuario { Id = 2, Nome = "Bob", Email = "bob@test.com", Senha = "123" };
+        var usuario3 = new Usuario { Id = 3, Nome = "Omar", Email = "omar@test.com", Senha = "123" };
+
+        var evento1 = new Evento
+        {
+            Id = 1,
+            Nome = "Reunião Inicial",
+            Descricao = "Reunião de kickoff do projeto",
+            Data = DateTime.Today.AddHours(10),
+            Local = "Zoom",
+            Tipo = TipoEvento.Exclusivo,
+            CriadorId = 1,
+            Criador = usuario1,
+            Ativo = true,
+            Participantes = new List<Usuario> { usuario2 }
+        };
+        var evento2 = new Evento
+        {
+            Id = 2,
+            Nome = "Happy Hour",
+            Descricao = "Happy com a galera",
+            Data = DateTime.Today.AddHours(18),
+            Local = "Churrascaria",
+            Tipo = TipoEvento.Compartilhado,
+            CriadorId = 2,
+            Criador = usuario3,
+            Ativo = true,
+            Participantes = new List<Usuario> { usuario3, usuario1, usuario2 }
+        };
+
+        context.Usuarios.AddRange(usuario1, usuario2, usuario3);
+        context.Eventos.Add(evento1);
+        context.Eventos.Add(evento2);
+        context.SaveChanges();
+    }
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

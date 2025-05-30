@@ -24,5 +24,11 @@
         <p><strong>Local:</strong> {{ evento.local }}</p>
         <p><strong>Tipo:</strong> {{ evento.tipo }}</p>
         <p><strong>Descrição:</strong> {{ evento.descricao }}</p>
+        <p><strong>Status:</strong> {{ evento.ativo ? 'Ativo' : 'Inativo' }}</p>
+        <!--
+        <button class="mt-2 bg-yellow-500 text-white px-4 py-1 rounded" (click)="toggleStatus(evento)">
+            {{ evento.ativo ? 'Desativar' : 'Ativar' }}
+        </button>
+-->
     </div>
 </div>

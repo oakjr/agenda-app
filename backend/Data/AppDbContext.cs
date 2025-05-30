@@ -20,6 +20,10 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Evento>()
             .HasMany(e => e.Participantes)
             .WithMany(u => u.EventosParticipando)
-            .UsingEntity(j => j.ToTable("EventoParticipante"));
+            .UsingEntity<Dictionary<string, object>>(
+                "EventoParticipante",
+                j => j.HasOne<Usuario>().WithMany().HasForeignKey("ParticipanteId"),
+                j => j.HasOne<Evento>().WithMany().HasForeignKey("EventoId")
+            );
     }
 }

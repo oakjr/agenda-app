@@ -53,4 +53,11 @@ export class DashboardComponent implements OnInit {
     filtrarMes(): void {
         this.eventoService.eventosDoMes().subscribe(res => this.eventos = res);
     }
+
+    toggleStatus(evento: Evento): void {
+        const novoStatus = !evento.ativo;
+        this.eventoService.alterarStatus(evento.id, novoStatus).subscribe(res => {
+            evento.ativo = res.ativo;
+        });
+    }
 }
