@@ -1,193 +1,188 @@
-# Sistema de Gerenciamento de Agenda
+# 📆 Agenda App - Projeto Fullstack (.NET + Angular)
 
-Este projeto é uma aplicação completa para o gerenciamento de agendas pessoais e compartilhadas. Os usuários podem criar eventos, compartilhá-los com outros usuários, editar, excluir e filtrar eventos por data ou texto. O sistema é dividido em back-end (ASP.NET Core) e front-end (Angular).
-
----
-
-## 🧰 Pré-requisitos
-
-### Backend (.NET)
-
-* .NET 6 SDK ou superior
-* SQL Server instalado localmente ou via Docker
-* Projeto Web API criado com:
-
-```bash
- dotnet new webapi -n AgendaAppBackend
- cd AgendaAppBackend
-```
-
-* Pacotes NuGet obrigatórios:
-
-```bash
- dotnet add package Microsoft.EntityFrameworkCore.SqlServer
- dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
- dotnet add package Microsoft.IdentityModel.Tokens
- dotnet add package System.IdentityModel.Tokens.Jwt
-```
-
-### Frontend (Angular)
-
-* Node.js 18+
-* Angular CLI 15+ (instale com `npm install -g @angular/cli`)
+Este projeto é um sistema de gerenciamento de agenda pessoal e compartilhada, desenvolvido com **ASP.NET Core 8** no backend e **Angular 16+** no frontend. Utiliza autenticação JWT, banco em memória (mockado com EF Core), e roteamento protegido com login.
 
 ---
 
-## 🧩 Tecnologias Utilizadas
+## 🧰 Tecnologias Utilizadas
 
-### Back-end
+### Backend (ASP.NET Core 8)
+- Entity Framework Core (InMemory)
+- Autenticação JWT
+- Swagger
 
-* ASP.NET Core
-* Entity Framework Core
-* JWT Authentication
-* SQL Server
-
-### Front-end
-
-* Angular
-* Tailwind CSS (para estilo)
-* RxJS / HttpClient
+### Frontend (Angular 16 ou 17)
+- Angular CLI
+- Reactive Forms (`FormGroup`)
+- HttpClient com JWT
+- Tailwind CSS (estilo)
 
 ---
 
-## 📦 Instalação
+## 🏁 Como Executar
 
-### Backend (ASP.NET Core)
+### 🔧 Pré-requisitos
+- [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download)
+- [Node.js 18+](https://nodejs.org/en)
+- Angular CLI 16/17: `npm install -g @angular/cli@16`
+
+### 📦 Instalar e Executar o Backend (API)
 
 ```bash
 cd backend
 
-# Restaurar pacotes e compilar
+# Restaurar pacotes
 dotnet restore
 
-dotnet build
-
-# Rodar aplicação
+# Executar com dados mockados em memória
 dotnet run
 ```
 
-> A API estará disponível por padrão em: `http://localhost:5000`
+- Swagger: http://localhost:5000/swagger
+- Usuários mockados:
+  - `alice@test.com` / `123`
+  - `bob@test.com` / `123`
+  - `omar@test.com` / `123`
 
-### Frontend (Angular)
+### 📦 Instalar e Executar o Frontend (Angular)
 
 ```bash
 cd frontend
-
-# Instalar dependências
 npm install
-
-# Rodar aplicação Angular
 ng serve --open
 ```
 
-> A aplicação será aberta em: `http://localhost:4200`
+- Abre automaticamente em: http://localhost:4200
+
+> Login obrigatório para acessar a dashboard.
 
 ---
 
-## 🔐 Configurações de Ambiente
+## 🔐 Autenticação
 
-No arquivo `appsettings.json`:
+A autenticação é baseada em JWT.
 
-```json
-"Jwt": {
-  "Key": "sua_chave_super_secreta"
-},
-"ConnectionStrings": {
-  "DefaultConnection": "Server=localhost;Database=AgendaDb;Trusted_Connection=True;"
-}
-```
+- Após o login, o token é salvo no `localStorage`.
+- Ele é usado automaticamente em requisições protegidas ao backend.
 
 ---
 
 ## 📋 Funcionalidades
 
-* Autenticação JWT com login
-* Cada usuário tem sua própria agenda
-* Criação de eventos com:
+### ✅ Login e Dashboard
+- Login por email/senha mockados
+- Redirecionamento automático após login
 
-  * Nome, descrição, data, local, tipo (exclusivo/compartilhado), participantes
-* Edição e exclusão de eventos
-* Filtros na dashboard:
+### ✅ Agenda por usuário
+- Cada usuário vê seus próprios eventos ou eventos compartilhados com ele
 
-  * Por texto
-  * Por data
-  * Botões de acesso rápido: eventos do dia, semana, mês
+### ✅ Eventos
+- Criar evento com:
+  - Nome, descrição, data, local, tipo (exclusivo/compartilhado)
+  - Participantes (usuários mockados)
+- Listar eventos com filtros:
+  - Por texto
+  - Por data específica
+  - Por botão rápido (Hoje, Semana, Mês)
+- Ativar/desativar evento (toggle de status)
+- Remover evento
+- (🔜 Em breve: Editar evento)
 
 ---
 
-## 🧪 Instruções de Teste Manual
+## 🧪 Testes manuais via Postman / curl
 
-### 1. Criar Usuário (registro)
+### Login
+```http
+POST http://localhost:5000/api/usuario/login
+Content-Type: application/json
 
-Endpoint: `POST /api/usuario/registrar`
-
-```json
 {
-  "nome": "João da Silva",
-  "email": "joao@example.com",
+  "email": "alice@test.com",
   "senha": "123456"
 }
 ```
 
-### 2. Login
-
-Endpoint: `POST /api/usuario/login`
-
-```json
-{
-  "email": "joao@example.com",
-  "senha": "123456"
-}
+### Listar eventos
+```http
+GET http://localhost:5000/api/eventos
+Authorization: Bearer <token>
 ```
 
-Resposta:
+### Criar evento
+```http
+POST http://localhost:5000/api/eventos
+Authorization: Bearer <token>
 
-```json
 {
-  "token": "<JWT>"
-}
-```
-
-### 3. Criar Evento
-
-Endpoint: `POST /api/eventos`
-Header: `Authorization: Bearer <JWT>`
-
-```json
-{
-  "nome": "Reunião de Projeto",
-  "descricao": "Alinhamento de tarefas",
+  "nome": "Reunião Geral",
+  "descricao": "Discussão de metas",
   "data": "2025-06-01T10:00:00",
   "local": "Google Meet",
   "tipo": "Compartilhado",
-  "participantesIds": [2, 3]
+  "participantesIds": [2]
 }
 ```
 
-### 4. Filtrar Eventos
-
-* `GET /api/eventos?search=projeto`
-* `GET /api/eventos?data=2025-06-01`
-* `GET /api/eventos/hoje`
-* `GET /api/eventos/semana`
-* `GET /api/eventos/mes`
-
-### 5. Editar Evento
-
-Endpoint: `PUT /api/eventos/{id}`
-
-### 6. Deletar Evento
-
-Endpoint: `DELETE /api/eventos/{id}`
+### Alterar status
+```http
+PATCH http://localhost:5000/api/eventos/1/status?ativo=false
+Authorization: Bearer <token>
+```
 
 ---
 
-## 🖼️ Diagrama UML
+## 🖼️ Arquitetura
 
-O diagrama de classes UML representa os principais relacionamentos entre as entidades `Usuario`, `Evento`, `EventoDTO`, `LoginRequest`, e `TipoEvento`. Consulte a imagem incluída no projeto para detalhes.
+- `AppDbContext`: banco de dados in-memory com entidades `Usuario`, `Evento`
+- `TokenService`: geração de token JWT
+- `UsuarioController`: login e registro
+- `EventoController`: CRUD completo de eventos com filtros
+- `AuthService`: serviço Angular para login e autenticação
+- `DashboardComponent`: lista e filtra eventos
+- `LoginComponent`: formulário reativo para login
+
+---
+
+## 📦 Estrutura de Diretórios (simplificada)
+
+```
+backend/
+├── Controllers/
+│   ├── UsuarioController.cs
+│   └── EventoController.cs
+├── Services/
+│   └── TokenService.cs
+├── Models/
+│   ├── Usuario.cs
+│   ├── Evento.cs
+│   └── LoginRequest.cs
+└── Program.cs
+
+frontend/
+├── src/app/
+│   ├── login/
+│   │   ├── login.component.ts
+│   │   ├── login.component.html
+│   ├── dashboard/
+│   │   ├── dashboard.component.ts
+│   │   ├── dashboard.component.html
+│   ├── services/
+│   │   ├── auth.service.ts
+│   │   ├── evento.service.ts
+│   └── app-routing.module.ts
+```
+
+---
+
+## 🧠 Sugestões futuras
+- Formulário para criar/editar eventos (Angular)
+- AuthGuard para proteger rotas
+- SQLite para persistência leve local
+- Interface admin para ver eventos de todos os usuários
 
 ---
 
 ## 📜 Licença
 
-Este projeto é de uso acadêmico e educativo. Direitos reservados à equipe do curso CCO002 - Engenharia de Software II - UNIFEI.
+Uso restrito apenas

@@ -2,11 +2,14 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css']
+    styleUrls: ['./login.component.css'],
+    standalone: false,
+
 })
 export class LoginComponent {
     loginForm: FormGroup;
