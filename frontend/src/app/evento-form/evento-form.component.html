@@ -1,0 +1,48 @@
+<div class="min-h-screen bg-gray-900 text-white flex items-center justify-center p-6">
+    <div class="bg-gray-800 rounded-xl p-6 shadow-md w-full max-w-2xl">
+        <h2 class="text-2xl font-bold mb-6 text-center">
+            {{ editando ? 'Editar Evento' : 'Criar Novo Evento' }}
+        </h2>
+
+        <form [formGroup]="form" (ngSubmit)="salvar()" class="space-y-4">
+            <div>
+                <label class="block mb-1">Nome</label>
+                <input type="text" formControlName="nome" class="w-full p-2" />
+            </div>
+
+            <div>
+                <label class="block mb-1">Descrição</label>
+                <textarea rows="3" formControlName="descricao" class="w-full p-2"></textarea>
+            </div>
+
+            <div>
+                <label class="block mb-1">Data</label>
+                <input type="datetime-local" formControlName="data" class="w-full p-2" />
+            </div>
+
+            <div>
+                <label class="block mb-1">Local</label>
+                <input type="text" formControlName="local" class="w-full p-2" />
+            </div>
+
+            <div>
+                <label class="block mb-1">Tipo</label>
+                <select formControlName="tipo" class="w-full p-2">
+                    <option value="Exclusivo">Exclusivo</option>
+                    <option value="Compartilhado">Compartilhado</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block mb-1">Participantes (IDs separados por vírgula)</label>
+                <input type="text"
+                    change="form.controls['participantesIds'].setValue((<HTMLInputElement>$event.target).value.split(',').map(x => +x.trim()))"
+                    class="w-full p-2" />
+            </div>
+
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 w-full py-2 rounded text-white">
+                {{ editando ? 'Atualizar' : 'Criar' }} Evento
+            </button>
+        </form>
+    </div>
+</div>

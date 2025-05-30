@@ -10,13 +10,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './services/token.interceptor';
 import { HeaderComponent } from './header/header.component';
+import { EventoFormComponent } from './evento-form/evento-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    HeaderComponent
+    HeaderComponent,
+    EventoFormComponent
   ],
   imports: [
     BrowserModule,
