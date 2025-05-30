@@ -6,11 +6,24 @@ using Microsoft.EntityFrameworkCore.InMemory;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 // JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
+        var jwtKey = builder.Configuration["Jwt:Key"];
+        if (string.IsNullOrEmpty(jwtKey))
+            throw new InvalidOperationException("JWT key is not configured. Please set 'Jwt:Key' in your configuration.");
+        var key = Encoding.ASCII.GetBytes(jwtKey);
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
@@ -30,6 +43,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 // ✅ Mock de usuários no banco em memória
 using (var scope = app.Services.CreateScope())
