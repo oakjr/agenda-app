@@ -83,10 +83,66 @@ using (var scope = app.Services.CreateScope())
             Ativo = true,
             Participantes = new List<Usuario> { usuario3, usuario1, usuario2 }
         };
+        var evento3 = new Evento
+        {
+            Id = 3,
+            Nome = "Reunião Geral",
+            Descricao = "Bronca do Chefe",
+            Data = DateTime.Today.AddHours(16),
+            Local = "Auditório",
+            Tipo = TipoEvento.Compartilhado,
+            CriadorId = 1,
+            Criador = usuario1,
+            Ativo = true,
+            Participantes = new List<Usuario> { usuario3, usuario1, usuario2 }
+        };
+        var evento4 = new Evento
+        {
+            Id = 4,
+            Nome = "Meeting Call",
+            Descricao = "Ligar para o cliente",
+            Data = DateTime.Parse("2023-06-14T11:00:00"),
+            Local = "Zoom",
+            Tipo = TipoEvento.Exclusivo,
+            CriadorId = 1,
+            Criador = usuario1,
+            Ativo = true,
+            Participantes = new List<Usuario> { usuario1 }
+        };
+        var evento5 = new Evento
+        {
+            Id = 5,
+            Nome = "Meeting Call",
+            Descricao = "Ligar para o cliente",
+            Data = DateTime.Parse("2023-06-04T11:00:00"),
+            Local = "Zoom",
+            Tipo = TipoEvento.Exclusivo,
+            CriadorId = 2,
+            Criador = usuario2,
+            Ativo = true,
+            Participantes = new List<Usuario> { usuario2 }
+        };
+        var evento6 = new Evento
+        {
+            Id = 6,
+            Nome = "Meeting Call",
+            Descricao = "Ligar para o cliente",
+            Data = DateTime.Today.AddHours(11),
+            Local = "Zoom",
+            Tipo = TipoEvento.Exclusivo,
+            CriadorId = 3,
+            Criador = usuario3,
+            Ativo = true,
+            Participantes = new List<Usuario> { usuario3 }
+        };
 
         context.Usuarios.AddRange(usuario1, usuario2, usuario3);
         context.Eventos.Add(evento1);
         context.Eventos.Add(evento2);
+        context.Eventos.Add(evento3);
+        context.Eventos.Add(evento4);
+        context.Eventos.Add(evento5);
+        context.Eventos.Add(evento6);
         context.SaveChanges();
     }
 }

@@ -1,5 +1,47 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+# Build results
+bin/
+obj/
+out/
 
-# Compiled output
-/bin
-/obj
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS Code
+.vscode/
+
+# Rider
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Dotnet secrets
+secrets.json
+
+# Database files
+*.mdf
+*.ldf
+*.db
+
+# ASP.NET Core
+appsettings.Development.json
+appsettings.Production.json
+appsettings.Local.json
+appsettings.*.json
+
+# Token files
+*.pfx
+*.cer
+
+# EF Core Migrations snapshots
+Migrations/*Snapshot.cs
+
+# Published builds
+publish/
