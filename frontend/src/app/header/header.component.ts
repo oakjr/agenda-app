@@ -13,7 +13,7 @@ export class HeaderComponent {
     const token = localStorage.getItem('token');
     if (!token) return null;
     const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.unique_name || payload.email || null;
+    return payload.nome || payload.unique_name || payload.email || null;
   }
 
   logout(): void {
