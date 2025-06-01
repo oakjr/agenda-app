@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 export class DashboardComponent implements OnInit {
     eventos: Evento[] = [];
     filtroForm: FormGroup;
+    carregando: boolean = false;
+    filtroSelecionado: 'hoje' | 'semana' | 'mes' | null = null;
 
     constructor(private eventoService: EventoService, private fb: FormBuilder, private router: Router) {
         this.filtroForm = this.fb.group({
@@ -24,13 +26,23 @@ export class DashboardComponent implements OnInit {
     }
 
     carregarEventos(): void {
-        this.eventoService.listarEventos().subscribe(eventos => this.eventos = eventos);
+        this.carregando = true;
+        this.eventoService.listarEventos().subscribe(eventos => {
+            this.eventos = eventos;
+            this.filtroSelecionado = null;
+            this.carregando = false;
+        });
     }
 
     aplicarFiltroTexto(): void {
         const texto = this.filtroForm.get('texto')?.value;
         if (texto?.trim()) {
-            this.eventoService.filtrarEventosPorTexto(texto).subscribe(res => this.eventos = res);
+            this.carregando = true;
+            this.eventoService.filtrarEventosPorTexto(texto).subscribe(res => {
+                this.eventos = res;
+                this.filtroSelecionado = null;
+                this.carregando = false;
+            });
         } else {
             this.carregarEventos();
         }
@@ -39,20 +51,40 @@ export class DashboardComponent implements OnInit {
     aplicarFiltroData(): void {
         const data = this.filtroForm.get('data')?.value;
         if (data) {
-            this.eventoService.filtrarEventosPorData(data).subscribe(res => this.eventos = res);
+            this.carregando = true;
+            this.eventoService.filtrarEventosPorData(data).subscribe(res => {
+                this.eventos = res;
+                this.filtroSelecionado = null;
+                this.carregando = false;
+            });
         }
     }
 
     filtrarHoje(): void {
-        this.eventoService.eventosDoDia().subscribe(res => this.eventos = res);
+        this.carregando = true;
+        this.eventoService.eventosDoDia().subscribe(res => {
+            this.eventos = res;
+            this.filtroSelecionado = 'hoje';
+            this.carregando = false;
+        });
     }
 
     filtrarSemana(): void {
-        this.eventoService.eventosDaSemana().subscribe(res => this.eventos = res);
+        this.carregando = true;
+        this.eventoService.eventosDaSemana().subscribe(res => {
+            this.eventos = res;
+            this.filtroSelecionado = 'semana';
+            this.carregando = false;
+        });
     }
 
     filtrarMes(): void {
-        this.eventoService.eventosDoMes().subscribe(res => this.eventos = res);
+        this.carregando = true;
+        this.eventoService.eventosDoMes().subscribe(res => {
+            this.eventos = res;
+            this.filtroSelecionado = 'mes';
+            this.carregando = false;
+        });
     }
 
     toggleStatus(evento: Evento): void {
@@ -67,7 +99,9 @@ export class DashboardComponent implements OnInit {
     }
 
     removerEvento(id: number): void {
-        this.eventoService.removerEvento(id).subscribe(() => this.carregarEventos());
+        if (confirm('Tem certeza que deseja excluir este evento?')) {
+            this.eventoService.removerEvento(id).subscribe(() => this.carregarEventos());
+        }
     }
 
     criarNovoEvento(): void {

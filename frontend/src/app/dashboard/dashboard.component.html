@@ -1,5 +1,10 @@
 <div class="min-h-screen bg-gray-900 text-white p-6">
-    <h2 class="text-2xl font-bold mb-6">Dashboard de Eventos</h2>
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold">Dashboard de Eventos</h2>
+        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded" (click)="criarNovoEvento()">
+            + Novo Evento
+        </button>
+    </div>
 
     <form [formGroup]="filtroForm" class="flex flex-col md:flex-row gap-4 mb-6">
         <input type="text" formControlName="texto" (input)="aplicarFiltroTexto()" placeholder="Buscar por texto..."
@@ -10,19 +15,37 @@
 
         <div class="flex gap-2">
             <button type="button" (click)="filtrarHoje()"
-                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Hoje</button>
+                [ngClass]="{'bg-blue-700': filtroSelecionado === 'hoje', 'bg-blue-600 hover:bg-blue-700': filtroSelecionado !== 'hoje'}"
+                class="text-white px-4 py-2 rounded">
+                Hoje
+            </button>
             <button type="button" (click)="filtrarSemana()"
-                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Semana</button>
+                [ngClass]="{'bg-green-700': filtroSelecionado === 'semana', 'bg-green-600 hover:bg-green-700': filtroSelecionado !== 'semana'}"
+                class="text-white px-4 py-2 rounded">
+                Semana
+            </button>
             <button type="button" (click)="filtrarMes()"
-                class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded">Mês</button>
+                [ngClass]="{'bg-purple-700': filtroSelecionado === 'mes', 'bg-purple-600 hover:bg-purple-700': filtroSelecionado !== 'mes'}"
+                class="text-white px-4 py-2 rounded">
+                Mês
+            </button>
         </div>
     </form>
 
-    <div *ngIf="eventos.length === 0" class="text-gray-400">Nenhum evento encontrado.</div>
+    <div *ngIf="carregando" class="text-center text-gray-400 py-6">Carregando eventos...</div>
+    <div *ngIf="!carregando && eventos.length === 0" class="text-gray-400">Nenhum evento encontrado.</div>
 
-    <div *ngFor="let evento of eventos" class="border border-gray-700 rounded p-4 bg-gray-800 mb-4"
+    <div *ngFor="let evento of eventos"
+        class="border border-gray-700 rounded p-4 bg-gray-800 mb-4 transition hover:bg-gray-700 cursor-pointer group"
         (click)="editarEvento(evento.id)">
-        <h3 class="text-xl font-semibold">{{ evento.nome }}</h3>
+
+        <div class="flex justify-between items-start">
+            <h3 class="text-xl font-semibold group-hover:underline">{{ evento.nome }}</h3>
+            <button class="text-red-400 hover:text-red-600" (click)="removerEvento(evento.id); $event.stopPropagation()"
+                title="Remover evento">
+                🗑️</button>
+        </div>
+
         <p><strong>Data:</strong> {{ evento.data | date:'short' }}</p>
         <p><strong>Local:</strong> {{ evento.local }}</p>
         <p><strong>Tipo:</strong> {{ evento.tipo }}</p>
@@ -30,7 +53,7 @@
         <p><strong>Status:</strong> {{ evento.ativo ? 'Ativo' : 'Inativo' }}</p>
 
         <button class="mt-2 bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded"
-            (click)="toggleStatus(evento)">
+            (click)="toggleStatus(evento); $event.stopPropagation()">
             {{ evento.ativo ? 'Desativar' : 'Ativar' }}
         </button>
     </div>
