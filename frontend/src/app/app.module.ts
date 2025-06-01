@@ -11,6 +11,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './services/token.interceptor';
 import { HeaderComponent } from './header/header.component';
 import { EventoFormComponent } from './evento-form/evento-form.component';
+import { ModalComponent } from './shared/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { EventoFormComponent } from './evento-form/evento-form.component';
     LoginComponent,
     DashboardComponent,
     HeaderComponent,
-    EventoFormComponent
+    EventoFormComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,

@@ -13,6 +13,7 @@ export class DashboardComponent implements OnInit {
     filtroForm: FormGroup;
     carregando: boolean = false;
     filtroSelecionado: 'hoje' | 'semana' | 'mes' | null = null;
+    mostrarModal: boolean = false;
 
     constructor(private eventoService: EventoService, private fb: FormBuilder, private router: Router) {
         this.filtroForm = this.fb.group({
