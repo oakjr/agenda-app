@@ -48,7 +48,7 @@
 
         <p><strong>Data:</strong> {{ evento.data | date:'short' }}</p>
         <p><strong>Local:</strong> {{ evento.local }}</p>
-        <p><strong>Tipo:</strong> {{ evento.tipo }}</p>
+        <p><strong>Tipo:</strong> {{ mapearTipo(evento.tipo) }}</p>
         <p><strong>Descrição:</strong> {{ evento.descricao }}</p>
         <p><strong>Status:</strong> {{ evento.ativo ? 'Ativo' : 'Inativo' }}</p>
 

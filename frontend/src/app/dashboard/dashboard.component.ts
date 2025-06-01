@@ -15,6 +15,11 @@ export class DashboardComponent implements OnInit {
     filtroSelecionado: 'hoje' | 'semana' | 'mes' | null = null;
     mostrarModal: boolean = false;
 
+    mapearTipo(tipo: number | string): string {
+        if (typeof tipo === 'string') return tipo;
+        return tipo === 0 ? 'Exclusivo' : 'Compartilhado';
+    }
+
     constructor(private eventoService: EventoService, private fb: FormBuilder, private router: Router) {
         this.filtroForm = this.fb.group({
             texto: [''],

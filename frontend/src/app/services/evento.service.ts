@@ -8,7 +8,7 @@ export interface Evento {
     descricao: string;
     data: string;
     local: string;
-    tipo: string;
+    tipo: 'Exclusivo' | 'Compartilhado' | number;
     ativo: boolean;
     participantesIds: number[];
 }
