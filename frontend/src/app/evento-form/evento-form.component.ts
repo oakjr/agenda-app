@@ -11,6 +11,7 @@ export class EventoFormComponent implements OnInit {
   form: FormGroup;
   editando: boolean = false;
   eventoId: number | null = null;
+  mostrarModal: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -49,14 +50,7 @@ export class EventoFormComponent implements OnInit {
   }
 
   salvar(): void {
-    if (this.form.invalid) return;
-
-    const dto = this.form.value;
-
-    if (this.editando && this.eventoId) {
-      this.eventoService.editarEvento(this.eventoId, dto).subscribe(() => this.router.navigate(['/dashboard']));
-    } else {
-      this.eventoService.criarEvento(dto).subscribe(() => this.router.navigate(['/dashboard']));
-    }
+    this.router.navigate(['/dashboard']);
   }
+
 }
