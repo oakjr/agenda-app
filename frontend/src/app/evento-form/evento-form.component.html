@@ -34,7 +34,7 @@
             </div>
 
             <div>
-                <label class="block mb-1">Participantes (IDs separados por vírgula)</label>
+                <label class="block mb-1">Participantes</label>
                 <input type="text"
                     change="form.controls['participantesIds'].setValue(($any($event.target).value.split(',').map(x => +x.trim())))"
                     class="w-full p-2" />
@@ -48,5 +48,5 @@
 </div>
 
 <app-modal [titulo]="'Funcionalidade em desenvolvimento'"
-    [mensagem]="'A criação de novos eventos será implementada em breve.'" [visivel]="mostrarModal"
+    [mensagem]="'A criação/edição de novos eventos será implementada em breve.'" [visivel]="mostrarModal"
     (fechar)="mostrarModal = false"></app-modal>

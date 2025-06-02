@@ -41,8 +41,9 @@ export class EventoService {
         return this.http.get<Evento[]>(`${this.api}/semana`);
     }
 
-    eventosDoMes(): Observable<Evento[]> {
-        return this.http.get<Evento[]>(`${this.api}/mes`);
+    eventosDoMes(data: string): Observable<Evento[]> {
+        const dataFormatada = new Date(data).toISOString().split('T')[0];
+        return this.http.get<Evento[]>(`${this.api}/mes?data=${dataFormatada}`);
     }
 
     criarEvento(dto: Partial<Evento>): Observable<Evento> {

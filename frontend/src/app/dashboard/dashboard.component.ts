@@ -85,8 +85,9 @@ export class DashboardComponent implements OnInit {
     }
 
     filtrarMes(): void {
+        const data = this.filtroForm.get('data')?.value || new Date().toISOString().split('T')[0];
         this.carregando = true;
-        this.eventoService.eventosDoMes().subscribe(res => {
+        this.eventoService.eventosDoMes(data).subscribe(res => {
             this.eventos = res;
             this.filtroSelecionado = 'mes';
             this.carregando = false;

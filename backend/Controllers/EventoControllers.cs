@@ -57,16 +57,18 @@ public class EventoController : ControllerBase
     }
 
     [HttpGet("mes")]
-    public IActionResult EventosMes()
+    public IActionResult EventosDoMes([FromQuery] DateTime data)
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var hoje = DateTime.Today;
-        var inicioMes = new DateTime(hoje.Year, hoje.Month, 1);
+        var inicioMes = new DateTime(data.Year, data.Month, 1);
         var fimMes = inicioMes.AddMonths(1);
 
         var eventos = _context.Eventos
-            .Where(e => (e.CriadorId == userId || e.Participantes.Any(p => p.Id == userId)) && e.Data >= inicioMes && e.Data < fimMes)
+            .Where(e =>
+                (e.CriadorId == userId || e.Participantes.Any(p => p.Id == userId)) &&
+                e.Data >= inicioMes && e.Data < fimMes)
             .ToList();
+
         return Ok(eventos);
     }
 
