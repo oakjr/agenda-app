@@ -23,7 +23,9 @@ public class EventoController : ControllerBase
             .Where(e => e.CriadorId == userId || e.Participantes.Any(p => p.Id == userId));
 
         if (!string.IsNullOrEmpty(search))
-            query = query.Where(e => e.Nome.Contains(search) || e.Descricao.Contains(search));
+            query = query.Where(e =>
+                (e.Nome != null && e.Nome.Contains(search)) ||
+                (e.Descricao != null && e.Descricao.Contains(search)));
 
         if (data.HasValue)
             query = query.Where(e => e.Data.Date == data.Value.Date);
